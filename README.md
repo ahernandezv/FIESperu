@@ -32,7 +32,7 @@ remotes::install_github("ahernandezv/FIESperu")
 ```r
 library(FIESperu)
 
-# Automatically downloads & caches INEI ENAHO 2025 Stata microdata on first run,
+# Automatically downloads INEI ENAHO 2025 Stata microdata on first run,
 # merges Module 2082 (FIES) + Module 34 (Sumaria) + optional sociodemographic blocks,
 # and calibrates the annual weighted Rasch model:
 fies_2025 <- prepare_fies(
@@ -40,7 +40,7 @@ fies_2025 <- prepare_fies(
   include = c("core", "demographics", "education_health", "programs")
 )
 
-# Official national, urban/rural, natural region, departmental, and Lima breakdowns:
+# Estimate official FIES indicators across geographic domains:
 # National Mod+Sev: 30.5% | Urban: 29.3% | Rural: 35.4% | National Severe: 3.4%
 official_tbl <- estimate_fies(fies_2025, by = "official")
 print(official_tbl)
@@ -52,7 +52,7 @@ estimate_fies(
   indicator = "mod_sev"
 )
 
-# Psychometric validation & diagnostic plots:
+# Validate the Rasch model and visualize results:
 val <- validate_rasch(fies_2025)
 plot_fies(val, type = "equating")
 plot_fies(official_tbl, type = "prevalence", group = "region_inei")
