@@ -6,9 +6,11 @@
 [![License: GPL (>= 3)](https://img.shields.io/badge/License-GPL%20%28%3E%3D%203%29-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 <!-- badges: end -->
 
-**`FIESperu`** automates the downloading, household-level harmonization, weighted Rasch psychometric validation, global equating, and complex-survey prevalence estimation of food insecurity in Peru from the **Food Insecurity Module (*Módulo de Inseguridad Alimentaria*, Module 2082 / Chapter 130)** of the **National Household Survey (ENAHO)** conducted by the **National Institute of Statistics and Informatics (INEI)** (2025 onwards).
+**`FIESperu`** automates the downloading, household-level harmonization, weighted Rasch psychometric validation, global equating, and complex-survey prevalence estimation of food insecurity in Peru from the **Food Insecurity Module (*Módulo de Inseguridad Alimentaria*, Module 2082)** of the **National Household Survey (ENAHO)** conducted by the **National Institute of Statistics and Informatics (INEI)** (2025 onwards).
 
 It reproduces the official INEI/FAO methodology for SDG indicator 2.1.2 with exact decimal precision, including Stata-compatible population weights, linear equating to the FAO FIES global reference standard, and combined sampling (se_s) and Rasch measurement (se_m) errors.
+
+Beyond official prevalence estimation, FIESperu also provides a reproducible, real-world data resource for teaching, training, and applied research in food insecurity measurement, FIES analysis, Rasch modeling, psychometric validation, and complex survey methodology.
 
 ---
 
