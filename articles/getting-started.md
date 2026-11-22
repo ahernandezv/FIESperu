@@ -3,17 +3,23 @@
 ## Overview
 
 `FIESperu` streamlines the estimation of **Moderate or Severe** and
-**Severe** food insecurity prevalence in Peru from the National
-Household Survey (**ENAHO**, conducted by **INEI**) using the Food
-Insecurity Experience Scale (**FIES**, Sustainable Development Goal
+**Severe** food insecurity prevalence in Peru from the **Food Insecurity
+Module (*Módulo de Inseguridad Alimentaria*, Module 2082)** of the
+National Household Survey (**ENAHO**, conducted by **INEI**) using the
+Food Insecurity Experience Scale (**FIES**, Sustainable Development Goal
 Indicator 2.1.2).
+
+Beyond official prevalence estimation, `FIESperu` also provides a
+reproducible, real-world data resource for **teaching, training, and
+applied research** in food insecurity measurement, FIES analysis, Rasch
+modeling, psychometric validation, and complex survey methodology.
 
 Specifically, `FIESperu` implements the official INEI / FAO methodology:
 
 1.  **Automated microdata download & caching** from INEI’s `srienaho`
     repository (annual surveys from 2025 onwards).
 2.  **Modular household harmonization** linking Module 2082
-    (`enaho01-{year}-130`, FIES) and Module 34 (`sumaria-{year}-12g`)
+    (`enaho01-<year>-130`, FIES) and Module 34 (`sumaria-<year>-12g`)
     with optional housing/NBI (`"housing"`), household demographic
     composition (`"demographics"`), education/disability/insurance
     (`"education_health"`), and social protection programs
@@ -31,11 +37,15 @@ Specifically, `FIESperu` implements the official INEI / FAO methodology:
 library(FIESperu)
 ```
 
-## 1. Exploring Available ENAHO Modules
+## 1. Exploring Available ENAHO Modules and the 8 FIES Questions
 
 Use
 [`fies_modules()`](https://ahernandezv.github.io/FIESperu/reference/fies_modules.md)
-to inspect the modular data blocks supported by the package:
+to inspect the modular data blocks supported by the package, and
+[`fies_items()`](https://ahernandezv.github.io/FIESperu/reference/fies_items.md)
+to view the exact wording, variable names, severity domains, and FAO
+global standard parameters of all eight FIES questions in ENAHO Chapter
+130:
 
 ``` r
 
@@ -43,14 +53,33 @@ fies_modules()
 #> # A tibble: 7 × 6
 #>   block           inei_module module_name_es dta_pattern unit_raw available_from
 #>   <chr>           <chr>       <chr>          <chr>       <chr>             <int>
-#> 1 core            2082        Inseguridad A… enaho01-{y… Househo…           2025
-#> 2 core            34          Sumarias (Var… sumaria-{y… Househo…           2025
-#> 3 housing         01          Caracteristic… enaho01-{y… Househo…           2025
-#> 4 demographics    02          Caracteristic… enaho01-{y… Member …           2025
-#> 5 education_heal… 03          Educacion      enaho01a-{… Member …           2025
-#> 6 education_heal… 04          Salud y Disca… enaho01a-{… Member …           2025
-#> 7 programs        37          Programas Soc… enaho01-{y… Househo…           2025
+#> 1 core            2082        Inseguridad A… enaho01-<y… Househo…           2025
+#> 2 core            34          Sumarias (Var… sumaria-<y… Househo…           2025
+#> 3 housing         01          Caracteristic… enaho01-<y… Househo…           2025
+#> 4 demographics    02          Caracteristic… enaho01-<y… Member …           2025
+#> 5 education_heal… 03          Educacion      enaho01a-<… Member …           2025
+#> 6 education_heal… 04          Salud y Disca… enaho01a-<… Member …           2025
+#> 7 programs        37          Programas Soc… enaho01-<y… Househo…           2025
 ```
+
+``` r
+
+knitr::kable(
+  fies_items()[, c("item_num", "enaho_var", "harmonized_var", "item_code", "global_st", "question_en")],
+  digits = 4
+)
+```
+
+| item_num | enaho_var | harmonized_var | item_code | global_st | question_en |
+|---:|:---|:---|:---|---:|:---|
+| 1 | p130_1 | fies_worried | WORRIED | -1.2231 | During the previous month, was there a time when you or another household member were worried you would not have enough food to eat because of a lack of money or other resources? |
+| 2 | p130_2 | fies_healthy | HEALTHY | -0.8471 | During the previous month, was there a time when you or another household member were unable to eat healthy and nutritious food because of a lack of money or other resources? |
+| 3 | p130_3 | fies_fewfood | FEWFOOD | -1.1057 | During the previous month, was there a time when you or another household member ate only a few kinds of foods because of a lack of money or other resources? |
+| 4 | p130_4 | fies_skipped | SKIPPED | 0.3510 | During the previous month, was there a time when you or another household member had to skip a meal because there was not enough money or other resources to get food? |
+| 5 | p130_5 | fies_ateless | ATELESS | -0.3118 | During the previous month, was there a time when you or another household member ate less than you thought you should because of a lack of money or other resources? |
+| 6 | p130_6 | fies_runout | RUNOUT | 0.5065 | During the previous month, was there a time when your household ran out of food because of a lack of money or other resources? |
+| 7 | p130_7 | fies_hungry | HUNGRY | 0.7546 | During the previous month, was there a time when you or another household member were hungry but did not eat because there was not enough money or other resources for food? |
+| 8 | p130_8 | fies_whlday | WHLDAY | 1.8755 | During the previous month, was there a time when you or another household member went without eating for a whole day because of a lack of money or other resources? |
 
 ## 2. Preparing Household Microdata and Fitting the Rasch Model
 
@@ -68,8 +97,8 @@ df_2025 <- prepare_fies(
 )
 ```
 
-For offline illustration, we use the bundled synthetic stratified
-dataset `fies_sample`:
+For offline illustration and Rasch model training, we use the bundled
+synthetic stratified dataset `fies_sample`:
 
 ``` r
 
@@ -182,11 +211,11 @@ plot_fies(est_reg, type = "prevalence")
 #> `height` was translated to `width`.
 ```
 
-![](getting-started_files/figure-html/unnamed-chunk-6-1.png)
+![](getting-started_files/figure-html/unnamed-chunk-7-1.png)
 
 ``` r
 
 plot_fies(val, type = "equating")
 ```
 
-![](getting-started_files/figure-html/unnamed-chunk-6-2.png)
+![](getting-started_files/figure-html/unnamed-chunk-7-2.png)

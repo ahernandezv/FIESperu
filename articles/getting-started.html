@@ -69,10 +69,17 @@
 </h2>
 <p><code>FIESperu</code> streamlines the estimation of <strong>Moderate
 or Severe</strong> and <strong>Severe</strong> food insecurity
-prevalence in Peru from the National Household Survey
-(<strong>ENAHO</strong>, conducted by <strong>INEI</strong>) using the
-Food Insecurity Experience Scale (<strong>FIES</strong>, Sustainable
-Development Goal Indicator 2.1.2).</p>
+prevalence in Peru from the <strong>Food Insecurity Module (<em>Módulo
+de Inseguridad Alimentaria</em>, Module 2082)</strong> of the National
+Household Survey (<strong>ENAHO</strong>, conducted by
+<strong>INEI</strong>) using the Food Insecurity Experience Scale
+(<strong>FIES</strong>, Sustainable Development Goal Indicator
+2.1.2).</p>
+<p>Beyond official prevalence estimation, <code>FIESperu</code> also
+provides a reproducible, real-world data resource for <strong>teaching,
+training, and applied research</strong> in food insecurity measurement,
+FIES analysis, Rasch modeling, psychometric validation, and complex
+survey methodology.</p>
 <p>Specifically, <code>FIESperu</code> implements the official INEI /
 FAO methodology:</p>
 <ol style="list-style-type: decimal">
@@ -82,8 +89,8 @@ INEI’s <code>srienaho</code> repository (annual surveys from 2025
 onwards).</li>
 <li>
 <strong>Modular household harmonization</strong> linking Module 2082
-(<code>enaho01-{year}-130</code>, FIES) and Module 34
-(<code>sumaria-{year}-12g</code>) with optional housing/NBI
+(<code>enaho01-&lt;year&gt;-130</code>, FIES) and Module 34
+(<code>sumaria-&lt;year&gt;-12g</code>) with optional housing/NBI
 (<code>"housing"</code>), household demographic composition
 (<code>"demographics"</code>), education/disability/insurance
 (<code>"education_health"</code>), and social protection programs
@@ -102,22 +109,129 @@ Rasch latent measurement error (<code>se_m</code>).</li>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ahernandezv/FIESperu" class="external-link">FIESperu</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="exploring-available-enaho-modules">1. Exploring Available ENAHO Modules<a class="anchor" aria-label="anchor" href="#exploring-available-enaho-modules"></a>
+<h2 id="exploring-available-enaho-modules-and-the-8-fies-questions">1. Exploring Available ENAHO Modules and the 8 FIES Questions<a class="anchor" aria-label="anchor" href="#exploring-available-enaho-modules-and-the-8-fies-questions"></a>
 </h2>
 <p>Use <code><a href="../reference/fies_modules.html">fies_modules()</a></code> to inspect the modular data blocks
-supported by the package:</p>
+supported by the package, and <code><a href="../reference/fies_items.html">fies_items()</a></code> to view the
+exact wording, variable names, severity domains, and FAO global standard
+parameters of all eight FIES questions in ENAHO Chapter 130:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fies_modules.html">fies_modules</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 7 × 6</span></span></span>
 <span><span class="co">#&gt;   block           inei_module module_name_es dta_pattern unit_raw available_from</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> core            2082        Inseguridad A… enaho01-{y… Househo…           <span style="text-decoration: underline;">2</span>025</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> core            34          Sumarias (Var… sumaria-{y… Househo…           <span style="text-decoration: underline;">2</span>025</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> housing         01          Caracteristic… enaho01-{y… Househo…           <span style="text-decoration: underline;">2</span>025</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> demographics    02          Caracteristic… enaho01-{y… Member …           <span style="text-decoration: underline;">2</span>025</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> education_heal… 03          Educacion      enaho01a-{… Member …           <span style="text-decoration: underline;">2</span>025</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> education_heal… 04          Salud y Disca… enaho01a-{… Member …           <span style="text-decoration: underline;">2</span>025</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> programs        37          Programas Soc… enaho01-{y… Househo…           <span style="text-decoration: underline;">2</span>025</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> core            2082        Inseguridad A… enaho01-&lt;y… Househo…           <span style="text-decoration: underline;">2</span>025</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> core            34          Sumarias (Var… sumaria-&lt;y… Househo…           <span style="text-decoration: underline;">2</span>025</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> housing         01          Caracteristic… enaho01-&lt;y… Househo…           <span style="text-decoration: underline;">2</span>025</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> demographics    02          Caracteristic… enaho01-&lt;y… Member …           <span style="text-decoration: underline;">2</span>025</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> education_heal… 03          Educacion      enaho01a-&lt;… Member …           <span style="text-decoration: underline;">2</span>025</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> education_heal… 04          Salud y Disca… enaho01a-&lt;… Member …           <span style="text-decoration: underline;">2</span>025</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> programs        37          Programas Soc… enaho01-&lt;y… Househo…           <span style="text-decoration: underline;">2</span>025</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/fies_items.html">fies_items</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"item_num"</span>, <span class="st">"enaho_var"</span>, <span class="st">"harmonized_var"</span>, <span class="st">"item_code"</span>, <span class="st">"global_st"</span>, <span class="st">"question_en"</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">4</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="3%">
+<col width="4%">
+<col width="6%">
+<col width="4%">
+<col width="4%">
+<col width="76%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">item_num</th>
+<th align="left">enaho_var</th>
+<th align="left">harmonized_var</th>
+<th align="left">item_code</th>
+<th align="right">global_st</th>
+<th align="left">question_en</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">p130_1</td>
+<td align="left">fies_worried</td>
+<td align="left">WORRIED</td>
+<td align="right">-1.2231</td>
+<td align="left">During the previous month, was there a time when you or
+another household member were worried you would not have enough food to
+eat because of a lack of money or other resources?</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">p130_2</td>
+<td align="left">fies_healthy</td>
+<td align="left">HEALTHY</td>
+<td align="right">-0.8471</td>
+<td align="left">During the previous month, was there a time when you or
+another household member were unable to eat healthy and nutritious food
+because of a lack of money or other resources?</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">p130_3</td>
+<td align="left">fies_fewfood</td>
+<td align="left">FEWFOOD</td>
+<td align="right">-1.1057</td>
+<td align="left">During the previous month, was there a time when you or
+another household member ate only a few kinds of foods because of a lack
+of money or other resources?</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">p130_4</td>
+<td align="left">fies_skipped</td>
+<td align="left">SKIPPED</td>
+<td align="right">0.3510</td>
+<td align="left">During the previous month, was there a time when you or
+another household member had to skip a meal because there was not enough
+money or other resources to get food?</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="left">p130_5</td>
+<td align="left">fies_ateless</td>
+<td align="left">ATELESS</td>
+<td align="right">-0.3118</td>
+<td align="left">During the previous month, was there a time when you or
+another household member ate less than you thought you should because of
+a lack of money or other resources?</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="left">p130_6</td>
+<td align="left">fies_runout</td>
+<td align="left">RUNOUT</td>
+<td align="right">0.5065</td>
+<td align="left">During the previous month, was there a time when your
+household ran out of food because of a lack of money or other
+resources?</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="left">p130_7</td>
+<td align="left">fies_hungry</td>
+<td align="left">HUNGRY</td>
+<td align="right">0.7546</td>
+<td align="left">During the previous month, was there a time when you or
+another household member were hungry but did not eat because there was
+not enough money or other resources for food?</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="left">p130_8</td>
+<td align="left">fies_whlday</td>
+<td align="left">WHLDAY</td>
+<td align="right">1.8755</td>
+<td align="left">During the previous month, was there a time when you or
+another household member went without eating for a whole day because of
+a lack of money or other resources?</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section level2">
 <h2 id="preparing-household-microdata-and-fitting-the-rasch-model">2. Preparing Household Microdata and Fitting the Rasch Model<a class="anchor" aria-label="anchor" href="#preparing-household-microdata-and-fitting-the-rasch-model"></a>
@@ -126,15 +240,15 @@ supported by the package:</p>
 <code>prepare_fies(years = 2025, include = "all")</code> automatically
 downloads and caches all required ENAHO 2025 Stata files on first use
 and returns a clean household-level <code>tibble</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Real ENAHO 2025 workflow (downloads once and reuses local cache):</span></span>
 <span><span class="va">df_2025</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_fies.html">prepare_fies</a></span><span class="op">(</span></span>
 <span>  years <span class="op">=</span> <span class="fl">2025</span>,</span>
 <span>  include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"core"</span>, <span class="st">"demographics"</span>, <span class="st">"education_health"</span>, <span class="st">"programs"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>For offline illustration, we use the bundled synthetic stratified
-dataset <code>fies_sample</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>For offline illustration and Rasch model training, we use the bundled
+synthetic stratified dataset <code>fies_sample</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prepare_fies.html">prepare_fies</a></span><span class="op">(</span>sample_data <span class="op">=</span> <span class="va">fies_sample</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">df_demo</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"area"</span>, <span class="st">"region_inei"</span>, <span class="st">"poverty"</span>, <span class="st">"fies_rs"</span>, <span class="st">"pr_mod_sev"</span>, <span class="st">"pr_sev"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 400 × 7</span></span></span>
@@ -164,7 +278,7 @@ multivariable regression analyses.</p>
 <p>Inspect item severities, <code>infit</code>/<code>outfit</code>
 statistics, flat Rasch reliability, and correlation against the FAO
 global standard:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">val</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_rasch.html">validate_rasch</a></span><span class="op">(</span><span class="va">df_demo</span><span class="op">)</span></span>
 <span><span class="va">val</span></span>
 <span><span class="co">#&gt; == FIESperu Psychometric Rasch Validation ==</span></span>
@@ -199,7 +313,7 @@ global standard:</p>
 Cartesian interactions), or the full official INEI geographical
 breakdown (<code>by = "official"</code>, which separates <em>Lima
 Metropolitana</em> from <em>Lima Region</em>):</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># National prevalence</span></span>
 <span><span class="fu"><a href="../reference/estimate_fies.html">estimate_fies</a></span><span class="op">(</span><span class="va">df_demo</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 13</span></span></span>
@@ -233,14 +347,14 @@ Metropolitana</em> from <em>Lima Region</em>):</p>
 <div class="section level2">
 <h2 id="visualizing-results-plot_fies">5. Visualizing Results (<code>plot_fies</code>)<a class="anchor" aria-label="anchor" href="#visualizing-results-plot_fies"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">est_reg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_fies.html">estimate_fies</a></span><span class="op">(</span><span class="va">df_demo</span>, by <span class="op">=</span> <span class="st">"region_inei"</span>, indicator <span class="op">=</span> <span class="st">"mod_sev"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_fies.html">plot_fies</a></span><span class="op">(</span><span class="va">est_reg</span>, type <span class="op">=</span> <span class="st">"prevalence"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `height` was translated to `width`.</span></span></code></pre></div>
-<p><img src="getting-started_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="672"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p><img src="getting-started_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="672"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_fies.html">plot_fies</a></span><span class="op">(</span><span class="va">val</span>, type <span class="op">=</span> <span class="st">"equating"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="getting-started_files/figure-html/unnamed-chunk-6-2.png" class="r-plt" alt="" width="672"></p>
+<p><img src="getting-started_files/figure-html/unnamed-chunk-7-2.png" class="r-plt" alt="" width="672"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

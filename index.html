@@ -10,8 +10,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Food Insecurity Experience Scale (FIES) Estimation for Peru">
-<meta name="description" content="Downloads, harmonizes, and analyzes microdata from the Food Insecurity Module (Módulo de Inseguridad Alimentaria) of the Peruvian National Household Survey (ENAHO) conducted by the National Institute of Statistics and Informatics (INEI) to estimate the prevalence of moderate or severe and severe food insecurity using the Food Insecurity Experience Scale (FIES). Implements the official INEI weighted Rasch calibration, equating to the global reference standard, and combined sampling plus measurement error estimation under complex survey designs following Cafiero, Viviani, and Nord (2018) &lt;doi:10.1016/j.measurement.2017.10.065&gt;.">
-<meta property="og:description" content="Downloads, harmonizes, and analyzes microdata from the Food Insecurity Module (Módulo de Inseguridad Alimentaria) of the Peruvian National Household Survey (ENAHO) conducted by the National Institute of Statistics and Informatics (INEI) to estimate the prevalence of moderate or severe and severe food insecurity using the Food Insecurity Experience Scale (FIES). Implements the official INEI weighted Rasch calibration, equating to the global reference standard, and combined sampling plus measurement error estimation under complex survey designs following Cafiero, Viviani, and Nord (2018) &lt;doi:10.1016/j.measurement.2017.10.065&gt;.">
+<meta name="description" content="Downloads, harmonizes, and analyzes microdata from the Food Insecurity Module (Módulo de Inseguridad Alimentaria) of the Peruvian National Household Survey (ENAHO) conducted by the National Institute of Statistics and Informatics (INEI) to estimate the prevalence of moderate or severe and severe food insecurity using the Food Insecurity Experience Scale (FIES). Implements the official INEI weighted Rasch calibration, equating to the global reference standard, and combined sampling plus measurement error estimation under complex survey designs following Cafiero, Viviani, and Nord (2018) &lt;doi:10.1016/j.measurement.2017.10.065&gt;. Beyond official prevalence estimation, provides a reproducible data resource for teaching, training, and applied research in food insecurity measurement, FIES analysis, Rasch modeling, psychometric validation, and complex survey methodology.">
+<meta property="og:description" content="Downloads, harmonizes, and analyzes microdata from the Food Insecurity Module (Módulo de Inseguridad Alimentaria) of the Peruvian National Household Survey (ENAHO) conducted by the National Institute of Statistics and Informatics (INEI) to estimate the prevalence of moderate or severe and severe food insecurity using the Food Insecurity Experience Scale (FIES). Implements the official INEI weighted Rasch calibration, equating to the global reference standard, and combined sampling plus measurement error estimation under complex survey designs following Cafiero, Viviani, and Nord (2018) &lt;doi:10.1016/j.measurement.2017.10.065&gt;. Beyond official prevalence estimation, provides a reproducible data resource for teaching, training, and applied research in food insecurity measurement, FIES analysis, Rasch modeling, psychometric validation, and complex survey methodology.">
 <meta property="og:image" content="https://ahernandezv.github.io/FIESperu/logo.png">
 </head>
 <body>
@@ -62,8 +62,8 @@
 <!-- badges: start -->
 
 <p><strong><code>FIESperu</code></strong> automates the downloading, household-level harmonization, weighted Rasch psychometric validation, global equating, and complex-survey prevalence estimation of food insecurity in Peru from the <strong>Food Insecurity Module (<em>Módulo de Inseguridad Alimentaria</em>, Module 2082)</strong> of the <strong>National Household Survey (ENAHO)</strong> conducted by the <strong>National Institute of Statistics and Informatics (INEI)</strong> (2025 onwards).</p>
-<p>It reproduces the official INEI/FAO methodology for SDG indicator 2.1.2 with exact decimal precision, including population weights, linear equating to the FAO FIES global reference standard, and combined sampling (se_s) and Rasch measurement (se_m) errors.</p>
-<p>Beyond official prevalence estimation, FIESperu also provides a reproducible, real-world data resource for teaching, training, and applied research in food insecurity measurement, FIES analysis, Rasch modeling, psychometric validation, and complex survey methodology.</p>
+<p>It reproduces the official INEI/FAO methodology for SDG indicator 2.1.2 with exact decimal precision, including population weights, linear equating to the FAO FIES global reference standard, and combined sampling (<code>se_s</code>) and Rasch measurement (<code>se_m</code>) errors.</p>
+<p>Beyond official prevalence estimation, <strong><code>FIESperu</code></strong> also provides a reproducible, real-world data resource for teaching, training, and applied research in food insecurity measurement, FIES analysis, Rasch modeling, psychometric validation, and complex survey methodology.</p>
 <hr>
 <div class="section level2">
 <h2 id="installation--instalación">Installation / Instalación<a class="anchor" aria-label="anchor" href="#installation--instalaci%C3%B3n"></a>
@@ -78,6 +78,100 @@
 <hr>
 </div>
 <div class="section level2">
+<h2 id="the-eight-fies-questions-enaho-module-2082">The Eight FIES Questions (ENAHO Module 2082)<a class="anchor" aria-label="anchor" href="#the-eight-fies-questions-enaho-module-2082"></a>
+</h2>
+<p>All eight questions can be queried in R via <code><a href="reference/fies_items.html">fies_items()</a></code> (raw coding in ENAHO: <code>1 = Yes</code>, <code>2 = No</code>, <code>3 = Don't know</code>, <code>4 = No response</code>; recoded by <code><a href="reference/prepare_fies.html">prepare_fies()</a></code> to <code>1 = Yes</code>, <code>0 = No</code>, <code>NA</code>):</p>
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="12%">
+<col width="16%">
+<col width="16%">
+<col width="16%">
+<col width="20%">
+<col width="16%">
+</colgroup>
+<thead><tr>
+<th align="center">#</th>
+<th align="left">ENAHO Var</th>
+<th align="left">Harmonized Var</th>
+<th align="left">FAO Code</th>
+<th align="center">Global Std (<code>fies.global.st</code>)</th>
+<th align="left">Official ENAHO Wording (Spanish, 30-day recall)</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="center">1</td>
+<td align="left"><code>p130_1</code></td>
+<td align="left"><code>fies_worried</code></td>
+<td align="left"><code>WORRIED</code></td>
+<td align="center"><code>-1.2231</code></td>
+<td align="left"><em>Durante el mes anterior, ¿hubo algún momento en el que usted o algún otro miembro del hogar estuvo preocupado de no tener suficiente comida para comer por falta de dinero u otras formas de conseguir los alimentos?</em></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left"><code>p130_2</code></td>
+<td align="left"><code>fies_healthy</code></td>
+<td align="left"><code>HEALTHY</code></td>
+<td align="center"><code>-0.8471</code></td>
+<td align="left"><em>Pensando aún en el mes anterior, ¿hubo un momento en el que usted o algún otro miembro del hogar no pudo comer alimentos saludables y nutritivos debido a la falta de dinero u otras formas de conseguir los alimentos?</em></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left"><code>p130_3</code></td>
+<td align="left"><code>fies_fewfood</code></td>
+<td align="left"><code>FEWFOOD</code></td>
+<td align="center"><code>-1.1057</code></td>
+<td align="left"><em>Durante el mes anterior, ¿hubo un momento en el que usted o algún otro miembro del hogar no comió alimentos variados debido a la falta de dinero u otras formas de conseguir los alimentos?</em></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="left"><code>p130_4</code></td>
+<td align="left"><code>fies_skipped</code></td>
+<td align="left"><code>SKIPPED</code></td>
+<td align="center"><code>+0.3510</code></td>
+<td align="left"><em>Durante el mes anterior, ¿hubo un momento en el que usted o algún otro miembro del hogar tuvo que dejar de desayunar, almorzar o cenar porque no había suficiente dinero u otras formas de conseguir los alimentos para obtener comida?</em></td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="left"><code>p130_5</code></td>
+<td align="left"><code>fies_ateless</code></td>
+<td align="left"><strong><code>ATELESS</code></strong></td>
+<td align="center"><strong><code>-0.3118</code></strong></td>
+<td align="left">
+<em>Pensando aún en el mes anterior, ¿hubo un momento en el que usted o algún otro miembro del hogar comió menor cantidad de lo normal, debido a la falta de dinero u otras formas de conseguir los alimentos?</em> <em>(Global threshold: Moderate or Severe)</em>
+</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="left"><code>p130_6</code></td>
+<td align="left"><code>fies_runout</code></td>
+<td align="left"><code>RUNOUT</code></td>
+<td align="center"><code>+0.5065</code></td>
+<td align="left"><em>En el mes anterior, ¿hubo un momento en el que su hogar se quedó sin alimentos por la falta de dinero u otras formas de conseguir los alimentos?</em></td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="left"><code>p130_7</code></td>
+<td align="left"><code>fies_hungry</code></td>
+<td align="left"><code>HUNGRY</code></td>
+<td align="center"><code>+0.7546</code></td>
+<td align="left"><em>En el mes anterior, ¿hubo un momento en que usted o algún otro miembro del hogar tuvo hambre, pero no comió porque no había suficiente dinero u otras formas de conseguir los alimentos para obtener comida?</em></td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="left"><code>p130_8</code></td>
+<td align="left"><code>fies_whlday</code></td>
+<td align="left"><strong><code>WHLDAY</code></strong></td>
+<td align="center"><strong><code>+1.8755</code></strong></td>
+<td align="left">
+<em>Durante el mes anterior, ¿hubo un momento en que usted o algún otro miembro del hogar estuvo sin comer durante un día entero debido a la falta de dinero u otras formas de conseguir los alimentos?</em> <em>(Global threshold: Severe)</em>
+</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</div>
+<div class="section level2">
 <h2 id="quick-start--uso-rápido">Quick Start / Uso Rápido<a class="anchor" aria-label="anchor" href="#quick-start--uso-r%C3%A1pido"></a>
 </h2>
 <div class="section level3">
@@ -85,6 +179,9 @@
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ahernandezv/FIESperu" class="external-link">FIESperu</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Inspect the 8 FIES items and official Spanish/English wording:</span></span>
+<span><span class="fu"><a href="reference/fies_items.html">fies_items</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Automatically downloads INEI ENAHO 2025 Stata microdata on first run,</span></span>
 <span><span class="co"># merges Module 2082 (FIES) + Module 34 (Sumaria) + optional sociodemographic blocks,</span></span>
@@ -112,12 +209,13 @@
 <span><span class="fu"><a href="reference/plot_fies.html">plot_fies</a></span><span class="op">(</span><span class="va">official_tbl</span>, type <span class="op">=</span> <span class="st">"prevalence"</span>, group <span class="op">=</span> <span class="st">"region_inei"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="id_2-offline-demo-fies_sample">2. Offline Demo (<code>fies_sample</code>)<a class="anchor" aria-label="anchor" href="#id_2-offline-demo-fies_sample"></a>
+<h3 id="id_2-offline-demo--rasch-training-fies_sample">2. Offline Demo &amp; Rasch Training (<code>fies_sample</code>)<a class="anchor" aria-label="anchor" href="#id_2-offline-demo--rasch-training-fies_sample"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ahernandezv/FIESperu" class="external-link">FIESperu</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">df_demo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/prepare_fies.html">prepare_fies</a></span><span class="op">(</span>sample_data <span class="op">=</span> <span class="va">fies_sample</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/validate_rasch.html">validate_rasch</a></span><span class="op">(</span><span class="va">df_demo</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/estimate_fies.html">estimate_fies</a></span><span class="op">(</span><span class="va">df_demo</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"area"</span>, <span class="st">"poverty"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
@@ -125,7 +223,7 @@
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<p>If you use <code>FIESperu</code> in academic publications or technical reports, please cite:</p>
+<p>If you use <code>FIESperu</code> in academic publications, teaching, or technical reports, please cite:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"FIESperu"</span><span class="op">)</span></span></code></pre></div>
 <ul>

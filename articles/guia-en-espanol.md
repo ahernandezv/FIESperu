@@ -10,16 +10,48 @@ Nacional de Hogares (ENAHO)** del **INEI** (desde 2025 en adelante),
 replicando exactamente la metodología oficial del INEI y la FAO
 (Indicador ODS 2.1.2).
 
+Además de la estimación oficial de prevalencias, `FIESperu` constituye
+un recurso reproducible de datos reales para la **docencia, el
+entrenamiento y la investigación aplicada** en medición de inseguridad
+alimentaria, análisis FIES, modelamiento de Rasch, validación
+psicométrica y metodología de encuestas complejas.
+
 ``` r
 
 library(FIESperu)
 ```
 
-## 1. Bloques Modulares Disponibles
+## 1. Las 8 Preguntas Oficiales FIES (Capítulo 130) y Bloques Modulares
 
-A partir de 2025, el INEI incorporó de manera permanente el **Módulo de
-Inseguridad Alimentaria** (`Modulo 2082` en `srienaho`, archivo
-`enaho01-2025-130`, Capítulo 130). Con
+En la ENAHO (Capítulo 130, período de referencia de los últimos 30 días:
+*“Durante el mes anterior…”*), cada hogar responde las 8 preguntas
+dicotómicas de la escala FIES (`1 = Sí`, `2 = No`, `3 = No sabe`,
+`4 = No responde`; recodificadas automáticamente por
+[`prepare_fies()`](https://ahernandezv.github.io/FIESperu/reference/prepare_fies.md)
+como `1 = Sí`, `0 = No` y `NA`). Puedes consultar el diccionario exacto
+en cualquier momento con
+[`fies_items()`](https://ahernandezv.github.io/FIESperu/reference/fies_items.md):
+
+``` r
+
+knitr::kable(
+  fies_items()[, c("item_num", "enaho_var", "harmonized_var", "item_code", "global_st", "question_es")],
+  digits = 4
+)
+```
+
+| item_num | enaho_var | harmonized_var | item_code | global_st | question_es |
+|---:|:---|:---|:---|---:|:---|
+| 1 | p130_1 | fies_worried | WORRIED | -1.2231 | Durante el mes anterior, ¿hubo algún momento en el que usted o algún otro miembro del hogar estuvo preocupado de no tener suficiente comida para comer por falta de dinero u otras formas de conseguir los alimentos? |
+| 2 | p130_2 | fies_healthy | HEALTHY | -0.8471 | Pensando aún en el mes anterior, ¿hubo un momento en el que usted o algún otro miembro del hogar no pudo comer alimentos saludables y nutritivos debido a la falta de dinero u otras formas de conseguir los alimentos? |
+| 3 | p130_3 | fies_fewfood | FEWFOOD | -1.1057 | Durante el mes anterior, ¿hubo un momento en el que usted o algún otro miembro del hogar no comió alimentos variados debido a la falta de dinero u otras formas de conseguir los alimentos? |
+| 4 | p130_4 | fies_skipped | SKIPPED | 0.3510 | Durante el mes anterior, ¿hubo un momento en el que usted o algún otro miembro del hogar tuvo que dejar de desayunar, almorzar o cenar porque no había suficiente dinero u otras formas de conseguir los alimentos para obtener comida? |
+| 5 | p130_5 | fies_ateless | ATELESS | -0.3118 | Pensando aún en el mes anterior, ¿hubo un momento en el que usted o algún otro miembro del hogar comió menor cantidad de lo normal, debido a la falta de dinero u otras formas de conseguir los alimentos? |
+| 6 | p130_6 | fies_runout | RUNOUT | 0.5065 | En el mes anterior, ¿hubo un momento en el que su hogar se quedó sin alimentos por la falta de dinero u otras formas de conseguir los alimentos? |
+| 7 | p130_7 | fies_hungry | HUNGRY | 0.7546 | En el mes anterior, ¿hubo un momento en que usted o algún otro miembro del hogar tuvo hambre, pero no comió porque no había suficiente dinero u otras formas de conseguir los alimentos para obtener comida? |
+| 8 | p130_8 | fies_whlday | WHLDAY | 1.8755 | Durante el mes anterior, ¿hubo un momento en que usted o algún otro miembro del hogar estuvo sin comer durante un día entero debido a la falta de dinero u otras formas de conseguir los alimentos? |
+
+Asimismo, con
 [`fies_modules()`](https://ahernandezv.github.io/FIESperu/reference/fies_modules.md)
 puedes consultar todos los módulos de la ENAHO que `FIESperu` puede
 descargar y cruzar a nivel de hogar:
@@ -30,13 +62,13 @@ fies_modules()
 #> # A tibble: 7 × 6
 #>   block           inei_module module_name_es dta_pattern unit_raw available_from
 #>   <chr>           <chr>       <chr>          <chr>       <chr>             <int>
-#> 1 core            2082        Inseguridad A… enaho01-{y… Househo…           2025
-#> 2 core            34          Sumarias (Var… sumaria-{y… Househo…           2025
-#> 3 housing         01          Caracteristic… enaho01-{y… Househo…           2025
-#> 4 demographics    02          Caracteristic… enaho01-{y… Member …           2025
-#> 5 education_heal… 03          Educacion      enaho01a-{… Member …           2025
-#> 6 education_heal… 04          Salud y Disca… enaho01a-{… Member …           2025
-#> 7 programs        37          Programas Soc… enaho01-{y… Househo…           2025
+#> 1 core            2082        Inseguridad A… enaho01-<y… Househo…           2025
+#> 2 core            34          Sumarias (Var… sumaria-<y… Househo…           2025
+#> 3 housing         01          Caracteristic… enaho01-<y… Househo…           2025
+#> 4 demographics    02          Caracteristic… enaho01-<y… Member …           2025
+#> 5 education_heal… 03          Educacion      enaho01a-<… Member …           2025
+#> 6 education_heal… 04          Salud y Disca… enaho01a-<… Member …           2025
+#> 7 programs        37          Programas Soc… enaho01-<y… Househo…           2025
 ```
 
 - `"core"`: Módulo 2082 (8 preguntas FIES) + Módulo 34 (`sumaria`,
@@ -90,7 +122,7 @@ datos_locales <- prepare_fies(
 )
 ```
 
-## 3. Ejemplo Reproducible Sin Conexión (`fies_sample`)
+## 3. Ejemplo Reproducible Sin Conexión y Entrenamiento Rasch (`fies_sample`)
 
 Usando la muestra sintética incluida en el paquete (`fies_sample`):
 
@@ -155,11 +187,11 @@ plot_fies(res_area, type = "prevalence")
 #> `height` was translated to `width`.
 ```
 
-![](guia-en-espanol_files/figure-html/unnamed-chunk-5-1.png)
+![](guia-en-espanol_files/figure-html/unnamed-chunk-6-1.png)
 
 ``` r
 
 plot_fies(val_rasch, type = "items")
 ```
 
-![](guia-en-espanol_files/figure-html/unnamed-chunk-5-2.png)
+![](guia-en-espanol_files/figure-html/unnamed-chunk-6-2.png)

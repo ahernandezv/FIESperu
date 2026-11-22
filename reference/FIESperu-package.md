@@ -10,7 +10,10 @@ calibration, equating to the global reference standard, and combined
 sampling plus measurement error estimation under complex survey designs
 following Cafiero, Viviani, and Nord (2018)
 [doi:10.1016/j.measurement.2017.10.065](https://doi.org/10.1016/j.measurement.2017.10.065)
-.
+. Beyond official prevalence estimation, provides a reproducible data
+resource for teaching, training, and applied research in food insecurity
+measurement, 'FIES' analysis, Rasch modeling, psychometric validation,
+and complex survey methodology.
 
 ## See also
 

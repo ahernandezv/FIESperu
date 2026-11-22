@@ -29,11 +29,11 @@ fies_modules()
 #> # A tibble: 7 × 6
 #>   block           inei_module module_name_es dta_pattern unit_raw available_from
 #>   <chr>           <chr>       <chr>          <chr>       <chr>             <int>
-#> 1 core            2082        Inseguridad A… enaho01-{y… Househo…           2025
-#> 2 core            34          Sumarias (Var… sumaria-{y… Househo…           2025
-#> 3 housing         01          Caracteristic… enaho01-{y… Househo…           2025
-#> 4 demographics    02          Caracteristic… enaho01-{y… Member …           2025
-#> 5 education_heal… 03          Educacion      enaho01a-{… Member …           2025
-#> 6 education_heal… 04          Salud y Disca… enaho01a-{… Member …           2025
-#> 7 programs        37          Programas Soc… enaho01-{y… Househo…           2025
+#> 1 core            2082        Inseguridad A… enaho01-<y… Househo…           2025
+#> 2 core            34          Sumarias (Var… sumaria-<y… Househo…           2025
+#> 3 housing         01          Caracteristic… enaho01-<y… Househo…           2025
+#> 4 demographics    02          Caracteristic… enaho01-<y… Member …           2025
+#> 5 education_heal… 03          Educacion      enaho01a-<… Member …           2025
+#> 6 education_heal… 04          Salud y Disca… enaho01a-<… Member …           2025
+#> 7 programs        37          Programas Soc… enaho01-<y… Househo…           2025
 ```

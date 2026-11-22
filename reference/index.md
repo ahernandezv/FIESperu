@@ -2,11 +2,13 @@
 
 ## Microdata Acquisition & Cache
 
-Explore available ENAHO modules and manage persistent local microdata
-storage.
+Explore available ENAHO modules, FIES questionnaire items, and
+persistent local microdata storage.
 
 - [`fies_modules()`](https://ahernandezv.github.io/FIESperu/reference/fies_modules.md)
   : List Available ENAHO Modules and Annual Survey Codes for FIESperu
+- [`fies_items()`](https://ahernandezv.github.io/FIESperu/reference/fies_items.md)
+  : Dictionary of the Eight FIES Items in INEI ENAHO (Chapter 130)
 - [`download_fies()`](https://ahernandezv.github.io/FIESperu/reference/download_fies.md)
   : Download and Cache INEI ENAHO Modules for FIES Estimation
 - [`fies_cache_dir()`](https://ahernandezv.github.io/FIESperu/reference/fies_cache_dir.md)
@@ -35,4 +37,4 @@ survey + measurement margins of error.
 ## Sample Data
 
 - [`fies_sample`](https://ahernandezv.github.io/FIESperu/reference/fies_sample.md)
-  : Synthetic ENAHO Household Sample for FIES Demonstration and Testing
+  : Synthetic ENAHO Household Sample for FIES and Rasch Training

@@ -1,10 +1,11 @@
-# Synthetic ENAHO Household Sample for FIES Demonstration and Testing
+# Synthetic ENAHO Household Sample for FIES and Rasch Training
 
 A lightweight synthetic dataset of 400 stratified households mimicking
 the structure and item severity ordering of the Peruvian ENAHO Module
-2082 (\`enaho01-2025-130\`) and Module 34 (\`sumaria-2025-12g\`).
-Provided so examples, vignettes, and unit tests run offline in under a
-second without contacting INEI servers.
+2082 (\`enaho01-\<year\>-130\`, Chapter 130) and Module 34
+(\`sumaria-\<year\>-12g\`). Designed both for offline package
+examples/tests and as a hands-on training dataset for teaching Food
+Insecurity Experience Scale ('FIES') and Rasch psychometric analysis.
 
 ## Usage
 
@@ -69,9 +70,41 @@ A data frame with 400 rows and 23 columns:
 
   Annual net household income (PEN).
 
-- p130_1, p130_2, p130_3, p130_4, p130_5, p130_6, p130_7, p130_8:
+- p130_1:
 
-  Eight FIES items coded \`1\` = Yes, \`2\` = No.
+  \`WORRIED\`: Worried about not having enough food (\`1\` = Yes, \`2\`
+  = No).
+
+- p130_2:
+
+  \`HEALTHY\`: Unable to eat healthy and nutritious food (\`1\` = Yes,
+  \`2\` = No).
+
+- p130_3:
+
+  \`FEWFOOD\`: Ate only a few kinds of foods (\`1\` = Yes, \`2\` = No).
+
+- p130_4:
+
+  \`SKIPPED\`: Had to skip a meal (\`1\` = Yes, \`2\` = No).
+
+- p130_5:
+
+  \`ATELESS\`: Ate less than normal (\`1\` = Yes, \`2\` = No; global
+  threshold for Moderate or Severe).
+
+- p130_6:
+
+  \`RUNOUT\`: Household ran out of food (\`1\` = Yes, \`2\` = No).
+
+- p130_7:
+
+  \`HUNGRY\`: Felt hungry but did not eat (\`1\` = Yes, \`2\` = No).
+
+- p130_8:
+
+  \`WHLDAY\`: Went without eating for a whole day (\`1\` = Yes, \`2\` =
+  No; global threshold for Severe).
 
 - has_child_u5:
 
@@ -85,3 +118,8 @@ A data frame with 400 rows and 23 columns:
 ## Source
 
 Simulated Rasch item responses calibrated to the FAO FIES global scale.
+
+## See also
+
+\[fies_items()\] for the verbatim Spanish and English wording of all
+eight items.
