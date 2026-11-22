@@ -18,6 +18,10 @@ Description: Downloads, harmonizes, and analyzes microdata from the Food
     equating to the global reference standard, and combined sampling plus
     measurement error estimation under complex survey designs following
     Cafiero, Viviani, and Nord (2018) <doi:10.1016/j.measurement.2017.10.065>.
+    Beyond official prevalence estimation, provides a reproducible data
+    resource for teaching, training, and applied research in food insecurity
+    measurement, 'FIES' analysis, Rasch modeling, psychometric validation, and
+    complex survey methodology.
 License: GPL (>= 3)
 URL: https://github.com/ahernandezv/FIESperu,
     https://ahernandezv.github.io/FIESperu/

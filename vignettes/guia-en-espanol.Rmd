@@ -20,13 +20,24 @@ knitr::opts_chunk$set(
 
 El paquete `FIESperu` automatiza la descarga, armonización, validación psicométrica (Modelo de Rasch) y estimación poblacional de la **Inseguridad Alimentaria Moderada o Severa** y **Severa** en el Perú a partir del **Módulo de Inseguridad Alimentaria** de la **Encuesta Nacional de Hogares (ENAHO)** del **INEI** (desde 2025 en adelante), replicando exactamente la metodología oficial del INEI y la FAO (Indicador ODS 2.1.2).
 
+Además de la estimación oficial de prevalencias, `FIESperu` constituye un recurso reproducible de datos reales para la **docencia, el entrenamiento y la investigación aplicada** en medición de inseguridad alimentaria, análisis FIES, modelamiento de Rasch, validación psicométrica y metodología de encuestas complejas.
+
 ```{r setup}
 library(FIESperu)
 ```
 
-## 1. Bloques Modulares Disponibles
+## 1. Las 8 Preguntas Oficiales FIES (Capítulo 130) y Bloques Modulares
 
-A partir de 2025, el INEI incorporó de manera permanente el **Módulo de Inseguridad Alimentaria** (`Modulo 2082` en `srienaho`, archivo `enaho01-2025-130`, Capítulo 130). Con `fies_modules()` puedes consultar todos los módulos de la ENAHO que `FIESperu` puede descargar y cruzar a nivel de hogar:
+En la ENAHO (Capítulo 130, período de referencia de los últimos 30 días: *"Durante el mes anterior..."*), cada hogar responde las 8 preguntas dicotómicas de la escala FIES (`1 = Sí`, `2 = No`, `3 = No sabe`, `4 = No responde`; recodificadas automáticamente por `prepare_fies()` como `1 = Sí`, `0 = No` y `NA`). Puedes consultar el diccionario exacto en cualquier momento con `fies_items()`:
+
+```{r}
+knitr::kable(
+  fies_items()[, c("item_num", "enaho_var", "harmonized_var", "item_code", "global_st", "question_es")],
+  digits = 4
+)
+```
+
+Asimismo, con `fies_modules()` puedes consultar todos los módulos de la ENAHO que `FIESperu` puede descargar y cruzar a nivel de hogar:
 
 ```{r}
 fies_modules()
@@ -61,7 +72,7 @@ datos_locales <- prepare_fies(
 )
 ```
 
-## 3. Ejemplo Reproducible Sin Conexión (`fies_sample`)
+## 3. Ejemplo Reproducible Sin Conexión y Entrenamiento Rasch (`fies_sample`)
 
 Usando la muestra sintética incluida en el paquete (`fies_sample`):
 

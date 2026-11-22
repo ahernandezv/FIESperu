@@ -4,6 +4,11 @@ test_that("module listing, cache helpers, and plot_fies execute cleanly", {
   expect_true(all(c("2082", "34", "01", "02", "03", "04", "37") %in% mods$inei_module))
   expect_error(fies_modules(2024), "starts in 2025")
 
+  items <- fies_items()
+  expect_s3_class(items, "tbl_df")
+  expect_equal(nrow(items), 8L)
+  expect_equal(items$enaho_var, paste0("p130_", 1:8))
+
   tmp_c <- file.path(tempdir(), "fiesperu_test_cache")
   dir.create(file.path(tmp_c, "2025"), recursive = TRUE, showWarnings = FALSE)
   expect_true(clear_fies_cache(years = 2025, cache_dir = tmp_c, quiet = TRUE))

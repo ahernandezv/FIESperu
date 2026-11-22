@@ -17,9 +17,10 @@ navbar:
 
 reference:
 - title: Microdata Acquisition & Cache
-  desc: Explore available ENAHO modules and manage persistent local microdata storage.
+  desc: Explore available ENAHO modules, FIES questionnaire items, and persistent local microdata storage.
   contents:
   - fies_modules
+  - fies_items
   - download_fies
   - fies_cache_dir
   - clear_fies_cache

@@ -18,12 +18,14 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-`FIESperu` streamlines the estimation of **Moderate or Severe** and **Severe** food insecurity prevalence in Peru from the National Household Survey (**ENAHO**, conducted by **INEI**) using the Food Insecurity Experience Scale (**FIES**, Sustainable Development Goal Indicator 2.1.2).
+`FIESperu` streamlines the estimation of **Moderate or Severe** and **Severe** food insecurity prevalence in Peru from the **Food Insecurity Module (*Módulo de Inseguridad Alimentaria*, Module 2082)** of the National Household Survey (**ENAHO**, conducted by **INEI**) using the Food Insecurity Experience Scale (**FIES**, Sustainable Development Goal Indicator 2.1.2).
+
+Beyond official prevalence estimation, `FIESperu` also provides a reproducible, real-world data resource for **teaching, training, and applied research** in food insecurity measurement, FIES analysis, Rasch modeling, psychometric validation, and complex survey methodology.
 
 Specifically, `FIESperu` implements the official INEI / FAO methodology:
 
 1. **Automated microdata download & caching** from INEI's `srienaho` repository (annual surveys from 2025 onwards).
-2. **Modular household harmonization** linking Module 2082 (`enaho01-{year}-130`, FIES) and Module 34 (`sumaria-{year}-12g`) with optional housing/NBI (`"housing"`), household demographic composition (`"demographics"`), education/disability/insurance (`"education_health"`), and social protection programs (`"programs"`).
+2. **Modular household harmonization** linking Module 2082 (`enaho01-<year>-130`, FIES) and Module 34 (`sumaria-<year>-12g`) with optional housing/NBI (`"housing"`), household demographic composition (`"demographics"`), education/disability/insurance (`"education_health"`), and social protection programs (`"programs"`).
 3. **Weighted Rasch calibration & global equating** against the FAO FIES global reference scale (`fies.global.st`), including 32-bit Stata float population weight matching (`as_stata_float()`).
 4. **Combined variance estimation** combining Taylor-linearized complex-survey sampling error (`se_s`) and Rasch latent measurement error (`se_m`).
 
@@ -31,12 +33,19 @@ Specifically, `FIESperu` implements the official INEI / FAO methodology:
 library(FIESperu)
 ```
 
-## 1. Exploring Available ENAHO Modules
+## 1. Exploring Available ENAHO Modules and the 8 FIES Questions
 
-Use `fies_modules()` to inspect the modular data blocks supported by the package:
+Use `fies_modules()` to inspect the modular data blocks supported by the package, and `fies_items()` to view the exact wording, variable names, severity domains, and FAO global standard parameters of all eight FIES questions in ENAHO Chapter 130:
 
 ```{r}
 fies_modules()
+```
+
+```{r}
+knitr::kable(
+  fies_items()[, c("item_num", "enaho_var", "harmonized_var", "item_code", "global_st", "question_en")],
+  digits = 4
+)
 ```
 
 ## 2. Preparing Household Microdata and Fitting the Rasch Model
@@ -51,7 +60,7 @@ df_2025 <- prepare_fies(
 )
 ```
 
-For offline illustration, we use the bundled synthetic stratified dataset `fies_sample`:
+For offline illustration and Rasch model training, we use the bundled synthetic stratified dataset `fies_sample`:
 
 ```{r}
 df_demo <- prepare_fies(sample_data = fies_sample, quiet = TRUE)

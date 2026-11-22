@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Downloads, harmonizes, and analyzes microdata from the Food Insecurity Module ('Módulo de Inseguridad Alimentaria') of the Peruvian National Household Survey ('ENAHO') conducted by the National Institute of Statistics and Informatics ('INEI') to estimate the prevalence of moderate or severe and severe food insecurity using the Food Insecurity Experience Scale ('FIES'). Implements the official 'INEI' weighted Rasch calibration, equating to the global reference standard, and combined sampling plus measurement error estimation under complex survey designs following Cafiero, Viviani, and Nord (2018) \doi{10.1016/j.measurement.2017.10.065}.
+Downloads, harmonizes, and analyzes microdata from the Food Insecurity Module ('Módulo de Inseguridad Alimentaria') of the Peruvian National Household Survey ('ENAHO') conducted by the National Institute of Statistics and Informatics ('INEI') to estimate the prevalence of moderate or severe and severe food insecurity using the Food Insecurity Experience Scale ('FIES'). Implements the official 'INEI' weighted Rasch calibration, equating to the global reference standard, and combined sampling plus measurement error estimation under complex survey designs following Cafiero, Viviani, and Nord (2018) \doi{10.1016/j.measurement.2017.10.065}. Beyond official prevalence estimation, provides a reproducible data resource for teaching, training, and applied research in food insecurity measurement, 'FIES' analysis, Rasch modeling, psychometric validation, and complex survey methodology.
 }
 \seealso{
 Useful links:
