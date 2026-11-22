@@ -85,7 +85,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ahernandezv/FIESperu" class="external-link">FIESperu</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Automatically downloads &amp; caches INEI ENAHO 2025 Stata microdata on first run,</span></span>
+<span><span class="co"># Automatically downloads INEI ENAHO 2025 Stata microdata on first run,</span></span>
 <span><span class="co"># merges Module 2082 (FIES) + Module 34 (Sumaria) + optional sociodemographic blocks,</span></span>
 <span><span class="co"># and calibrates the annual weighted Rasch model:</span></span>
 <span><span class="va">fies_2025</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/prepare_fies.html">prepare_fies</a></span><span class="op">(</span></span>
@@ -93,7 +93,7 @@
 <span>  include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"core"</span>, <span class="st">"demographics"</span>, <span class="st">"education_health"</span>, <span class="st">"programs"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Official national, urban/rural, natural region, departmental, and Lima breakdowns:</span></span>
+<span><span class="co"># Estimate official FIES indicators across geographic domains:</span></span>
 <span><span class="co"># National Mod+Sev: 30.5% | Urban: 29.3% | Rural: 35.4% | National Severe: 3.4%</span></span>
 <span><span class="va">official_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_fies.html">estimate_fies</a></span><span class="op">(</span><span class="va">fies_2025</span>, by <span class="op">=</span> <span class="st">"official"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">official_tbl</span><span class="op">)</span></span>
@@ -105,7 +105,7 @@
 <span>  indicator <span class="op">=</span> <span class="st">"mod_sev"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Psychometric validation &amp; diagnostic plots:</span></span>
+<span><span class="co"># Validate the Rasch model and visualize results:</span></span>
 <span><span class="va">val</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/validate_rasch.html">validate_rasch</a></span><span class="op">(</span><span class="va">fies_2025</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plot_fies.html">plot_fies</a></span><span class="op">(</span><span class="va">val</span>, type <span class="op">=</span> <span class="st">"equating"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plot_fies.html">plot_fies</a></span><span class="op">(</span><span class="va">official_tbl</span>, type <span class="op">=</span> <span class="st">"prevalence"</span>, group <span class="op">=</span> <span class="st">"region_inei"</span><span class="op">)</span></span></code></pre></div>
