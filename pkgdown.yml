@@ -1,0 +1,10 @@
+pandoc: 3.8.3
+pkgdown: 2.2.1
+pkgdown_sha: ~
+articles:
+  getting-started: getting-started.html
+  guia-en-espanol: guia-en-espanol.html
+last_built: 2026-11-22T08:14Z
+urls:
+  reference: https://ahernandezv.github.io/FIESperu/reference
+  article: https://ahernandezv.github.io/FIESperu/articles
