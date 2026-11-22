@@ -1,0 +1,96 @@
+---
+title: "Guía en Español: Estimación de Inseguridad Alimentaria con FIESperu"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Guía en Español: Estimación de Inseguridad Alimentaria con FIESperu}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4.5
+)
+```
+
+## Introducción
+
+El paquete `FIESperu` automatiza la descarga, armonización, validación psicométrica (Modelo de Rasch) y estimación poblacional de la **Inseguridad Alimentaria Moderada o Severa** y **Severa** en el Perú a partir del **Módulo de Inseguridad Alimentaria** de la **Encuesta Nacional de Hogares (ENAHO)** del **INEI** (desde 2025 en adelante), replicando exactamente la metodología oficial del INEI y la FAO (Indicador ODS 2.1.2).
+
+```{r setup}
+library(FIESperu)
+```
+
+## 1. Bloques Modulares Disponibles
+
+A partir de 2025, el INEI incorporó de manera permanente el **Módulo de Inseguridad Alimentaria** (`Modulo 2082` en `srienaho`, archivo `enaho01-2025-130`, Capítulo 130). Con `fies_modules()` puedes consultar todos los módulos de la ENAHO que `FIESperu` puede descargar y cruzar a nivel de hogar:
+
+```{r}
+fies_modules()
+```
+
+- `"core"`: Módulo 2082 (8 preguntas FIES) + Módulo 34 (`sumaria`, pobreza monetaria, gasto e ingreso per cápita, miembros del hogar `mieperho`) y variables geográficas oficiales (`area`, `department`, `region_inei` separando **Lima Metropolitana** y **Lima Región**, y `natural_region`).
+- `"housing"`: Módulo 01 (agua por red pública, cloro residual seguro, alcantarillado, electricidad, combustible limpio para cocinar, piso de tierra y Necesidades Básicas Insatisfechas `nbi_1`..`nbi_5`).
+- `"demographics"`: Módulo 02 agregado a hogar (presencia de menores de 5 años `has_child_u5`, menores de 18, adultos mayores de 60+, y sexo, edad y estado civil del jefe o jefa de hogar).
+- `"education_health"`: Módulos 03 y 04 agregados a hogar (nivel educativo y lengua materna indígena o castellano del jefe de hogar, presencia de alguna persona con discapacidad permanente `has_disability` y seguro de salud SIS/EsSalud).
+- `"programs"`: Módulo 37 (acceso del hogar a Vaso de Leche, Comedor Popular, Alimentación Escolar, Cuna Más, Juntos, Pensión 65, Contigo y Bono Gas).
+
+## 2. Flujo con Microdatos Reales de ENAHO (2025+)
+
+Cuando trabajas conectado a internet, `prepare_fies()` descarga por única vez los archivos `.dta` oficiales del INEI en tu caché local (`fies_cache_dir()`) y construye la base consolidada de hogares:
+
+```r
+# Descarga (si no está en caché) y prepara ENAHO 2025 con todos los módulos:
+datos_2025 <- prepare_fies(years = 2025, include = "all")
+
+# Replicación exacta del informe técnico oficial del INEI 2025:
+# Nacional Moderada o Severa: 30.5% | Urbana: 29.3% | Rural: 35.4% | Severa: 3.4%
+tabla_oficial <- estimate_fies(datos_2025, by = "official")
+```
+
+Si ya descargaste manualmente los archivos `.dta` o `.sav` en una carpeta local (por ejemplo, `"D:/Inseguridad_Alimentaria_2025"`), puedes indicarla con `local_dir`:
+
+```r
+datos_locales <- prepare_fies(
+  years = 2025,
+  local_dir = "D:/Inseguridad_Alimentaria_2025",
+  download = FALSE
+)
+```
+
+## 3. Ejemplo Reproducible Sin Conexión (`fies_sample`)
+
+Usando la muestra sintética incluida en el paquete (`fies_sample`):
+
+```{r}
+base_hogar <- prepare_fies(sample_data = fies_sample, quiet = TRUE)
+
+# Validación psicométrica del modelo de Rasch (severidad, infit, outfit, confiabilidad)
+val_rasch <- validate_rasch(base_hogar)
+val_rasch$summary
+val_rasch$items[, c("item_code", "severity_b", "infit", "adj_global_st")]
+```
+
+### Estimación de prevalencias con error muestral + error de medición
+
+`estimate_fies()` combina el error estándar del diseño muestral complejo (`conglome`, `estrato`, `wt_pop`) con el error de medición de Rasch:
+
+```{r}
+# Prevalencia según presencia de menores de 5 años y discapacidad
+estimate_fies(
+  base_hogar,
+  by = c("has_child_u5", "has_disability"),
+  indicator = "mod_sev"
+)
+```
+
+### Gráficos de prevalencia y diagnóstico Rasch
+
+```{r}
+res_area <- estimate_fies(base_hogar, by = "poverty_3cat", indicator = "mod_sev")
+plot_fies(res_area, type = "prevalence")
+plot_fies(val_rasch, type = "items")
+```

@@ -1,0 +1,95 @@
+---
+title: "Getting Started with FIESperu"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with FIESperu}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4.5
+)
+```
+
+## Overview
+
+`FIESperu` streamlines the estimation of **Moderate or Severe** and **Severe** food insecurity prevalence in Peru from the National Household Survey (**ENAHO**, conducted by **INEI**) using the Food Insecurity Experience Scale (**FIES**, Sustainable Development Goal Indicator 2.1.2).
+
+Specifically, `FIESperu` implements the official INEI / FAO methodology:
+
+1. **Automated microdata download & caching** from INEI's `srienaho` repository (annual surveys from 2025 onwards).
+2. **Modular household harmonization** linking Module 2082 (`enaho01-{year}-130`, FIES) and Module 34 (`sumaria-{year}-12g`) with optional housing/NBI (`"housing"`), household demographic composition (`"demographics"`), education/disability/insurance (`"education_health"`), and social protection programs (`"programs"`).
+3. **Weighted Rasch calibration & global equating** against the FAO FIES global reference scale (`fies.global.st`), including 32-bit Stata float population weight matching (`as_stata_float()`).
+4. **Combined variance estimation** combining Taylor-linearized complex-survey sampling error (`se_s`) and Rasch latent measurement error (`se_m`).
+
+```{r setup}
+library(FIESperu)
+```
+
+## 1. Exploring Available ENAHO Modules
+
+Use `fies_modules()` to inspect the modular data blocks supported by the package:
+
+```{r}
+fies_modules()
+```
+
+## 2. Preparing Household Microdata and Fitting the Rasch Model
+
+With an internet connection, running `prepare_fies(years = 2025, include = "all")` automatically downloads and caches all required ENAHO 2025 Stata files on first use and returns a clean household-level `tibble`:
+
+```r
+# Real ENAHO 2025 workflow (downloads once and reuses local cache):
+df_2025 <- prepare_fies(
+  years = 2025,
+  include = c("core", "demographics", "education_health", "programs")
+)
+```
+
+For offline illustration, we use the bundled synthetic stratified dataset `fies_sample`:
+
+```{r}
+df_demo <- prepare_fies(sample_data = fies_sample, quiet = TRUE)
+df_demo[, c("year", "area", "region_inei", "poverty", "fies_rs", "pr_mod_sev", "pr_sev")]
+```
+
+Because `prepare_fies()` returns a household-level `tibble` containing `conglome`, `estrato`, `wt_hh`, `wt_pop`, and `pr_mod_sev`, you can also pass it directly to `survey::svydesign()` and `survey::svyglm()` for multivariable regression analyses.
+
+## 3. Psychometric Validation (`validate_rasch`)
+
+Inspect item severities, `infit`/`outfit` statistics, flat Rasch reliability, and correlation against the FAO global standard:
+
+```{r}
+val <- validate_rasch(df_demo)
+val
+```
+
+## 4. Estimating Prevalences and Margins of Error (`estimate_fies`)
+
+Compute national estimates, custom subgroup breakdowns (including Cartesian interactions), or the full official INEI geographical breakdown (`by = "official"`, which separates *Lima Metropolitana* from *Lima Region*):
+
+```{r}
+# National prevalence
+estimate_fies(df_demo)
+
+# Disaggregation by urban/rural area and monetary poverty (with interaction)
+estimate_fies(
+  df_demo,
+  by = c("area", "poverty"),
+  combine_by = TRUE,
+  indicator = "mod_sev"
+)
+```
+
+## 5. Visualizing Results (`plot_fies`)
+
+```{r}
+est_reg <- estimate_fies(df_demo, by = "region_inei", indicator = "mod_sev")
+plot_fies(est_reg, type = "prevalence")
+plot_fies(val, type = "equating")
+```

@@ -1,0 +1,46 @@
+Package: FIESperu
+Type: Package
+Title: Food Insecurity Experience Scale ('FIES') Estimation for Peru
+Version: 0.1.0
+Authors@R: person(
+    given = "Akram",
+    family = "Hernández-Vásquez",
+    role = c("aut", "cre"),
+    email = "akram.hernandez.v@gmail.com",
+    comment = c(ORCID = "0000-0003-1431-2526")
+  )
+Description: Downloads, harmonizes, and analyzes microdata from the Food
+    Insecurity Module ('Módulo de Inseguridad Alimentaria') of the Peruvian
+    National Household Survey ('ENAHO') conducted by the National Institute of
+    Statistics and Informatics ('INEI') to estimate the prevalence of moderate
+    or severe and severe food insecurity using the Food Insecurity Experience
+    Scale ('FIES'). Implements the official 'INEI' weighted Rasch calibration,
+    equating to the global reference standard, and combined sampling plus
+    measurement error estimation under complex survey designs following
+    Cafiero, Viviani, and Nord (2018) <doi:10.1016/j.measurement.2017.10.065>.
+License: GPL (>= 3)
+URL: https://github.com/ahernandezv/FIESperu,
+    https://ahernandezv.github.io/FIESperu/
+BugReports: https://github.com/ahernandezv/FIESperu/issues
+Depends: R (>= 4.1.0)
+Imports:
+    graphics,
+    haven,
+    RM.weights,
+    stats,
+    survey,
+    tibble,
+    tools,
+    utils
+Suggests:
+    curl,
+    ggplot2,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Encoding: UTF-8
+LazyData: true
+NeedsCompilation: no
+Config/roxygen2/version: 8.1.1

@@ -1,0 +1,10 @@
+bibentry(
+  bibtype = "Manual",
+  title   = "FIESperu: Food Insecurity Experience Scale (FIES) Estimation for Peru",
+  author  = person(given = "Akram", family = "Hernández-Vásquez",
+                   email = "akram.hernandez.v@gmail.com",
+                   comment = c(ORCID = "0000-0003-1431-2526")),
+  year    = "2026",
+  note    = "R package version 0.1.0",
+  url     = "https://github.com/ahernandezv/FIESperu"
+)

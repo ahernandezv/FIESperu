@@ -1,0 +1,38 @@
+url: https://ahernandezv.github.io/FIESperu/
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    articles:
+      text: Articles / Guías
+      menu:
+      - text: Getting Started (English)
+        href: articles/getting-started.html
+      - text: Guía en Español
+        href: articles/guia-en-espanol.html
+
+reference:
+- title: Microdata Acquisition & Cache
+  desc: Explore available ENAHO modules and manage persistent local microdata storage.
+  contents:
+  - fies_modules
+  - download_fies
+  - fies_cache_dir
+  - clear_fies_cache
+
+- title: Rasch Calibration & Prevalence Estimation
+  desc: Harmonize household datasets, validate Rasch psychometrics, and compute survey + measurement margins of error.
+  contents:
+  - prepare_fies
+  - estimate_fies
+  - validate_rasch
+  - plot_fies
+  - as_stata_float
+
+- title: Sample Data
+  contents:
+  - fies_sample
