@@ -8,7 +8,7 @@
 
 **`FIESperu`** automates the downloading, household-level harmonization, weighted Rasch psychometric validation, global equating, and complex-survey prevalence estimation of food insecurity in Peru from the **Food Insecurity Module (*Módulo de Inseguridad Alimentaria*, Module 2082 / Chapter 130)** of the **National Household Survey (ENAHO)** conducted by the **National Institute of Statistics and Informatics (INEI)** (2025 onwards).
 
-It reproduces **to the exact decimal** the official INEI / FAO Sustainable Development Goal (SDG 2.1.2) methodology—including Stata 32-bit float population weight matching (`as_stata_float()`), linear equating to the FAO FIES global reference standard, and combined Taylor-linearized sampling error (`se_s`) plus Rasch measurement error (`se_m`).
+It reproduces the official INEI/FAO methodology for SDG indicator 2.1.2 with exact decimal precision, including Stata-compatible population weights, linear equating to the FAO FIES global reference standard, and combined sampling (se_s) and Rasch measurement (se_m) errors.
 
 ---
 
